@@ -1,0 +1,7 @@
+/bin
+/lib
+/obj
+/build
+/3rdparty
+run.sh
+test_only*.cpp

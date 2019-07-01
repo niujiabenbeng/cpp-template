@@ -1,0 +1,4 @@
+-I./include
+-I./3rdparty/opencv/include
+-I./3rdparty/boost/include
+

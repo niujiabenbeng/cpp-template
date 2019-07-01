@@ -1,0 +1,12 @@
+---
+# clang-format version: 6.0.0
+Language: Cpp
+BasedOnStyle: Google
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AlwaysBreakBeforeMultilineStrings: false
+KeepEmptyLinesAtTheStartOfBlocks: true
+DerivePointerAlignment: false
+SpaceAfterCStyleCast: true
+Standard: Cpp11
+
