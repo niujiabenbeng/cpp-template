@@ -14,7 +14,7 @@ PROJECT := hello
 
 INCLUDE := $(INCDIR)
 LIBRARY :=
-LIBS := dl m z rt
+LIBS := dl m z rt glog
 
 INCLUDE := $(foreach INC, $(INCLUDE), -I $(INC))
 LIBRARY := $(foreach LIB, $(LIBRARY), -L $(LIB))
