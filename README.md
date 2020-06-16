@@ -20,7 +20,7 @@
 
 ```Makefile
 # 第三方库设置实例:
-INCLUDE := $(INCDIR) /home/chenli/Documents/tools/opencv/include
+INCLUDE := /home/chenli/Documents/tools/opencv/include
 LIBRARY := /home/chenli/Documents/tools/opencv/lib
 # 这里glog对应的文件为: libglog.so, opencv_core对应的文件为: libopencv_core.so
 LIBS := dl m z rt glog opencv_core
@@ -39,9 +39,10 @@ PROJECT := hello_or_whatever_you_like
 ### Make 命令
 
 ```shell
-make        # 编译整个工程(单线程)
-make -j4    # 编译整个工程(4线程)
-make -j     # 编译整个工程(线程数与系统的逻辑核数一致)
+make        # 编译lib文件
+make lib    # 编译lib文件
+make tools  # 编译可执行文件
+make all    # 编译整个工程(包含lib和tools)
 make clean  # 清空编译的文件
 ```
 
@@ -55,3 +56,13 @@ make clean  # 清空编译的文件
 ### clang-format & clang_complete
 
 clang-format 配置文件基于 clang-format v 6.0.
+
+
+### compile_commands.json
+
+生成compile_commands.json的命令
+
+``` shell
+sudo apt install bear
+bear make
+```

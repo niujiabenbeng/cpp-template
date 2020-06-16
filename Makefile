@@ -12,13 +12,14 @@ TOOLSDIR := tools
 BUILDDIR := build
 PROJECT := hello
 
-INCLUDE := $(INCDIR)
-LIBRARY :=
+INCLUDE := /home/ainfinit/Documents/tools/boost/include
+LIBRARY := /home/ainfinit/Documents/tools/boost/lib
 LIBS := dl m z rt glog
 
-INCLUDE := $(foreach INC, $(INCLUDE), -I $(INC))
+INCLUDE := $(foreach INC, $(INCLUDE), -isystem $(INC))
 LIBRARY := $(foreach LIB, $(LIBRARY), -L $(LIB))
 LIBS := $(foreach LIB, $(LIBS), -l$(LIB))
+INCLUDE += -I $(INCDIR)
 
 ### all header files
 HEADERS := $(shell find $(INCDIR) -type f -name *.h)
@@ -36,7 +37,11 @@ TGT_TOOLS := $(addprefix $(BUILDDIR)/, ${SRC_TOOLS:.cpp=.bin})
 ### 所有与build相关的目录
 ALL_BUILD_DIRS := $(sort $(dir $(OBJ_SRC) $(TGT_SRC) $(TGT_TOOLS)))
 
-all: $(TGT_TOOLS)
+lib: $(TGT_SRC)
+
+tools: $(TGT_TOOLS)
+
+all: $(TGT_SRC) $(TGT_TOOLS)
 
 $(TGT_SRC): $(OBJ_SRC)
 	$(CC) -shared -o $@ $^ $(LIBRARY) $(LIBS)
@@ -56,4 +61,4 @@ $(ALL_BUILD_DIRS):
 clean:
 	rm -rf $(BUILDDIR)
 
-.PHONY: clean
+.PHONY: clean lib tools all
