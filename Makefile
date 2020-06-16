@@ -12,6 +12,7 @@ TOOLSDIR := tools
 BUILDDIR := build
 PROJECT := hello
 
+### 这里添加第三方库
 INCLUDE := /home/ainfinit/Documents/tools/boost/include
 LIBRARY := /home/ainfinit/Documents/tools/boost/lib
 LIBS := dl m z rt glog

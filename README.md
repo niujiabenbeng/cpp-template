@@ -63,6 +63,17 @@ clang-format 配置文件基于 clang-format v 6.0.
 生成compile_commands.json的命令
 
 ``` shell
+### make
 sudo apt install bear
 bear make
+
+### cmake
+mkdir build && cd build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 ```
+
+
+### cmake设置
+
+cmake设置和makefile差不多, 需要注意的是, 目前的CMakeLists.txt不支持递归搜索目录,
+如果src/或者tools/中有子目录, 则需手动添加.
