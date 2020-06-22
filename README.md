@@ -65,7 +65,7 @@ clang-format 配置文件基于 clang-format v 6.0.
 ``` shell
 ### make
 sudo apt install bear
-bear make
+bear make all
 
 ### cmake
 mkdir build && cd build
@@ -77,3 +77,35 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 
 cmake设置和makefile差不多, 需要注意的是, 目前的CMakeLists.txt不支持递归搜索目录,
 如果src/或者tools/中有子目录, 则需手动添加.
+
+
+### 基于global的跳转
+
+安装global:
+
+``` shell
+wget http://tamacom.com/global/global-6.6.4.tar.gz
+tar zxvf global-6.6.4.tar.gz && cd global-6.6.4
+./configure --prefix=${HOME}/Documents/tools/global
+make -j4 && make install
+```
+
+生成tags: 在project的根目录下运行: `gtags`
+
+
+### 基于clang的补全
+
+``` shell
+## get srouce code: https://github.com/llvm/llvm-project/releases
+mkdir build && cd build
+cmake -G "Unix Makefiles" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly" \
+      -DCMAKE_INSTALL_PREFIX=${HOME}/Documents/tools/clang \
+      -DCMAKE_BUILD_TYPE=Release \
+      ../llvm
+make -j32 && make install
+```
+
+### .neoignore
+
+用neotree作为emacs的侧边栏时, 可以设置`.neoignore`来决定哪些文件需要被隐藏.

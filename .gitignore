@@ -7,3 +7,6 @@ run.sh
 test_only*.cpp
 .clangd/
 compile_commands.json
+GPATH
+GRTAGS
+GTAGS
