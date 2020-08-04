@@ -58,6 +58,10 @@ OBJ_TOOLS := $(addprefix $(BUILDDIR)/, ${SRC_TOOLS:.cpp=.o})
 DEP_TOOLS := $(addprefix $(BUILDDIR)/, ${SRC_TOOLS:.cpp=.d})
 TGT_TOOLS := $(addprefix $(BUILDDIR)/, ${SRC_TOOLS:.cpp=.bin})
 
+### 提前建好所有与build相关的目录
+ALL_BUILD_DIRS := $(sort $(dir $(OBJ_SRC) $(TGT_SRC) $(TGT_TOOLS)))
+ALL_BUILD_DIRS := $(shell mkdir -p $(ALL_BUILD_DIRS))
+
 lib: $(TGT_SRC)
 
 tools: $(TGT_TOOLS)
@@ -65,19 +69,15 @@ tools: $(TGT_TOOLS)
 all: $(TGT_SRC) $(TGT_TOOLS)
 
 $(TGT_SRC): $(OBJ_SRC)
-	mkdir -p $(@D)
 	$(CC) -shared -o $@ $^ $(LIBRARY) $(LIBS)
 
 $(TGT_TOOLS): %.bin : %.o $(OBJ_SRC)
-	mkdir -p $(@D)
 	$(CC) -o $@ $^ $(LIBRARY) $(LIBS)
 
 $(OBJ_SRC): $(BUILDDIR)/%.o : %.cpp
-	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -MMD -c -o $@ $< $(INCLUDE)
 
 $(OBJ_TOOLS): $(BUILDDIR)/%.o : %.cpp
-	mkdir -p $(@D)
 	$(CC) $(CFLAGS) -MMD -c -o $@ $< $(INCLUDE)
 
 ifneq ($(filter clean, $(MAKECMDGOALS)), clean)
