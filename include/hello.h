@@ -4,7 +4,7 @@
 #include <string>
 
 class Hello {
-public:
+ public:
   std::string Greeting(const std::string& name) const;
 };
 
