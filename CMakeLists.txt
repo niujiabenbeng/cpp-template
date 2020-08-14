@@ -20,7 +20,7 @@ set(TOOLSDIR ${PROJECT_SOURCE_DIR}/tools)
 ### 这里添加第三方库
 set(INCLUDE ./3rdparty/boost/include)
 set(LIBRARY ./3rdparty/boost/lib)
-set(LIBS dl m z rt glog)
+set(LIBS dl m z rt glog gtest boost_system boost_filesystem)
 include_directories(SYSTEM ${INCLUDE})
 include_directories(${INCDIR})
 link_directories(${LIBRARY})

@@ -53,12 +53,36 @@ make clean  # 清空编译的文件
 后缀名为.bin, 对应于tools目录中的cpp文件. 生成的lib文件位于: build/lib目录中.
 
 
-### clang-format & clang_complete
+### cmake设置
 
-clang-format 配置文件基于 clang-format v 6.0.
+cmake设置和makefile差不多, 需要注意的是, 目前的CMakeLists.txt不支持递归搜索目录,
+如果src/或者tools/中有子目录, 则需手动添加.
 
 
-### compile_commands.json
+--------------------------------------------------------------------------------
+--------------------------- 以下属于个人编程环境配置 ---------------------------
+--------------------------------------------------------------------------------
+
+### clangd (c++ language server)
+
+``` shell
+## get srouce code: https://github.com/llvm/llvm-project/releases
+mkdir build && cd build
+cmake -G "Unix Makefiles" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly" \
+      -DCMAKE_INSTALL_PREFIX=${HOME}/Documents/tools/clang \
+      -DCMAKE_BUILD_TYPE=Release \
+      ../llvm
+make -j32 && make install
+
+## 配置环境变量
+export LD_LIBRARY_PATH=${HOME}/Documents/tools/clang/lib:${LD_LIBRARY_PATH}
+export PATH=${HOME}/Documents/tools/clang/bin:${PATH}
+```
+
+##### 跳转和补全
+
+clangd需要compile_commands.json来解析源码.
 
 生成compile_commands.json的命令
 
@@ -72,39 +96,40 @@ mkdir build && cd build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
 ```
 
+不管是采用bear还是cmake方式, 每添加一个源文件, 都需要重新生成
+compile_commands.json.
 
-### cmake设置
+compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp文件的编译选项都
+一致, 则可以用compile_flags.txt, 以下是一个示例:
 
-cmake设置和makefile差不多, 需要注意的是, 目前的CMakeLists.txt不支持递归搜索目录,
-如果src/或者tools/中有子目录, 则需手动添加.
-
-
-### 基于global的跳转
-
-安装global:
-
-``` shell
-wget http://tamacom.com/global/global-6.6.4.tar.gz
-tar zxvf global-6.6.4.tar.gz && cd global-6.6.4
-./configure --prefix=${HOME}/Documents/tools/global
-make -j4 && make install
+``` text
+-g
+-xc++
+-std=c++14
+-Iinclude
+-I3rdparty/boost/include
+-I3rdparty/opencv/include
+-I~/Documents/tools/boost/include
+-I~/Documents/tools/opencv/include
 ```
 
-生成tags: 在project的根目录下运行: `gtags`
+其中, `-xc++`选项将所有的`.h`文件按`c++`头文件处理, 若没有这个选项, 则clangd会认
+为`.h`文件为`c`的头文件, 其中使用`c++`的语法会报错.
+
+注意:
+
+1. `-I`和包含路径之间不能有空格, 否则clangd无法识别(不报错, 但无法正常工作).
+
+2. 这里为了方便, 包含了多个`opencv`和`boost`的目录, 如果产生冲突, 则需要删掉多余的.
+
+3. helm-lsp中, 默认开启了模糊匹配, 为了避免补全选项过多过杂, 需要关闭模糊匹配:
+   `:fuzzy-match nil`
 
 
-### 基于clang的补全
+##### clang-format
 
-``` shell
-## get srouce code: https://github.com/llvm/llvm-project/releases
-mkdir build && cd build
-cmake -G "Unix Makefiles" \
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly" \
-      -DCMAKE_INSTALL_PREFIX=${HOME}/Documents/tools/clang \
-      -DCMAKE_BUILD_TYPE=Release \
-      ../llvm
-make -j32 && make install
-```
+clang-format 配置文件基于 clang-format v10.0.
+
 
 ### .neoignore
 
