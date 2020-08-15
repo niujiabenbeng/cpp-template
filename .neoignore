@@ -1,5 +1,8 @@
-GPATH$
-GRTAGS$
-GTAGS$
-build$
-compile_commands.json
+^\.clangd$
+^\.git$
+^\.github$
+^GPATH$
+^GRTAGS$
+^GTAGS$
+\.o$
+\.d$
