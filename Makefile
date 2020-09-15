@@ -15,7 +15,7 @@ PROJECT  := hello
 ### 这里添加第三方库
 INCLUDE := ./3rdparty/boost/include
 LIBRARY := ./3rdparty/boost/lib
-LIBS    := dl m z rt glog gtest boost_system boost_filesystem
+LIBS    := dl m z rt glog gtest pthread boost_system boost_filesystem
 
 ### makefile中, 函数名与参数之间用空格隔开, 多个参数之间用逗号隔开
 INCLUDE := $(foreach INC,$(INCLUDE),-isystem $(INC))

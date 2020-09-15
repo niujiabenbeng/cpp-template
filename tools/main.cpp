@@ -2,6 +2,7 @@
 #include <gtest/gtest.h>
 
 #include "common.h"
+#include "thread_pool.h"
 #include "timer.h"
 #include "util.h"
 
@@ -13,6 +14,12 @@ TEST(FileIOTest, fileio) {
   if (boost::filesystem::exists(tempfile)) {
     boost::filesystem::remove(tempfile);
   }
+}
+
+TEST(ThreadPoolTest, pool) {
+  ThreadPool pool(4);
+  auto result = pool.enqueue([](int answer) { return answer; }, 42);
+  EXPECT_EQ(result.get(), 42);
 }
 
 int main(int argc, char* argv[]) {
