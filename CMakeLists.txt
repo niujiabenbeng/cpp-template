@@ -10,7 +10,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(hello)
 
 ### 这里选择用clang还是gcc
-set(CMAKE_CXX_COMPILER g++)
+set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_FLAGS "-g -Wall -fpic -O3 -std=c++14")
 
 set(INCDIR   ${PROJECT_SOURCE_DIR}/include)
@@ -20,7 +20,8 @@ set(TOOLSDIR ${PROJECT_SOURCE_DIR}/tools)
 ### 这里添加第三方库
 set(INCLUDE ./3rdparty/boost/include)
 set(LIBRARY ./3rdparty/boost/lib)
-set(LIBS dl m z rt glog gtest boost_system boost_filesystem)
+set(LIBS dl m z rt glog gtest gflags jsoncpp pthread
+  boost_system boost_filesystem)
 include_directories(SYSTEM ${INCLUDE})
 include_directories(${INCDIR})
 link_directories(${LIBRARY})

@@ -10,7 +10,7 @@ TEST(FileIOTest, fileio) {
   auto tempfile = boost::filesystem::unique_path().string();
   std::vector<std::string> lines = {"hello", "world"};
   EXPECT_TRUE(WriteFile(tempfile, lines));
-  EXPECT_STREQ(ReadFile(tempfile).c_str(), "hello\nworld\n");
+  EXPECT_EQ(ReadFile(tempfile), "hello\nworld\n");
   if (boost::filesystem::exists(tempfile)) {
     boost::filesystem::remove(tempfile);
   }
@@ -20,6 +20,20 @@ TEST(ThreadPoolTest, pool) {
   ThreadPool pool(4);
   auto result = pool.enqueue([](int answer) { return answer; }, 42);
   EXPECT_EQ(result.get(), 42);
+}
+
+TEST(JsonTest, json) {
+  Json::Value root;
+  root["one"] = 1;
+  root["hello"] = "world";
+  auto tempfile = boost::filesystem::unique_path().string();
+  WriteJsonFile(root, tempfile);
+  auto content = ReadJsonFile(tempfile);
+  EXPECT_EQ(content.get("one", 0).asInt(), 1);
+  EXPECT_EQ(content.get("hello", "").asString(), "world");
+  if (boost::filesystem::exists(tempfile)) {
+    boost::filesystem::remove(tempfile);
+  }
 }
 
 int main(int argc, char* argv[]) {

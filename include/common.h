@@ -58,5 +58,6 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <jsoncpp/json/json.h>
 
 #endif  // CPP_TEMPLATE_COMMON_H_
