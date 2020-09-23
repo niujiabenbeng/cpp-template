@@ -12,29 +12,35 @@ TOOLSDIR := tools
 BUILDDIR := build
 PROJECT  := hello
 
-### 这里添加第三方库
+# 这里添加第三方库
 INCLUDE := ./3rdparty/boost/include
 LIBRARY := ./3rdparty/boost/lib
 LIBS    := dl m z rt glog gtest gflags jsoncpp pthread \
            boost_system boost_filesystem
 
-### makefile中, 函数名与参数之间用空格隔开, 多个参数之间用逗号隔开
+# 这里添加不想被编译的文件, 文件路径相对于工程目录.
+# 这里两个cpp文件并不存在, 只是用来做例子.
+EXCLUDE := src/exclude.cpp tools/exclude.cpp
+
+# makefile中, 函数名与参数之间用空格隔开, 多个参数之间用逗号隔开
 INCLUDE := $(foreach INC,$(INCLUDE),-isystem $(INC))
 LIBRARY := $(foreach LIB,$(LIBRARY),-L $(LIB))
 LIBS    := $(foreach LIB,$(LIBS),-l$(LIB))
 INCLUDE += -I $(INCDIR)
 
-### $(SRCDIR)包含所有的库cpp
+# $(SRCDIR)包含所有的库cpp
 SRC_SRC := $(shell find $(SRCDIR) -type f -name *.cpp)
+SRC_SRC := $(filter-out $(EXCLUDE),$(SRC_SRC))
 OBJ_SRC := $(addprefix $(BUILDDIR)/,$(SRC_SRC:.cpp=.o))
 TGT_SRC := $(BUILDDIR)/lib/lib$(PROJECT).so
 
-### $(TOOLSDIR)包含所有的有main函数的cpp
+# $(TOOLSDIR)包含所有的有main函数的cpp
 SRC_TOOLS := $(shell find $(TOOLSDIR) -type f -name *.cpp)
+SRC_TOOLS := $(filter-out $(EXCLUDE),$(SRC_TOOLS))
 OBJ_TOOLS := $(addprefix $(BUILDDIR)/,$(SRC_TOOLS:.cpp=.o))
 TGT_TOOLS := $(addprefix $(BUILDDIR)/,$(SRC_TOOLS:.cpp=.bin))
 
-### 提前建好所有与build相关的目录
+# 提前建好所有与build相关的目录
 ALL_BUILD_DIRS := $(sort $(dir $(OBJ_SRC) $(TGT_SRC) $(TGT_TOOLS)))
 ALL_BUILD_DIRS := $(shell mkdir -p $(ALL_BUILD_DIRS))
 
@@ -54,9 +60,9 @@ $(OBJ_SRC) $(OBJ_TOOLS): $(BUILDDIR)/%.o : %.cpp
 	$(CC) $(CFLAGS) -MP -MMD -c -o $@ $< $(INCLUDE)
 
 ifneq ($(filter clean, $(MAKECMDGOALS)), clean)
-    ### 这里'-'表示忽略错误.
-    ### 缺省状态下只编译lib, 这里把tools的头文件依赖也包含进去虽然略显多余,
-    ### 但是由于.d文件只包含依赖, 并没有实际的编译指令, 所以并不耗费时间.
+    # 这里'-'表示忽略错误.
+    # 缺省状态下只编译lib, 这里把tools的头文件依赖也包含进去虽然略显多余,
+    # 但是由于.d文件只包含依赖, 并没有实际的编译指令, 所以并不耗费时间.
     -include $(OBJ_SRC:.o=.d)
     -include $(OBJ_TOOLS:.o=.d)
 endif

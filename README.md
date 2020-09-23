@@ -59,6 +59,26 @@ cmake设置和makefile差不多, 需要注意的是, 目前的CMakeLists.txt不�
 如果src/或者tools/中有子目录, 则需手动添加.
 
 
+### 本示例中所需要的3rdparty
+
+``` shell
+sudo apt install -y libgoogle-glog-dev
+sudo apt install -y libgflags-dev
+sudo apt install -y libjsoncpp-dev
+sudo apt install -y libboost-all-dev
+```
+
+gtest没有提供`apt install`的选项, 需要从源码安装:
+
+``` shell
+wget https://github.com/google/googletest/archive/release-1.8.1.tar.gz
+tar zxvf release-1.8.1.tar.gz
+cd googletest-release-1.8.1
+mkdir build && cd build
+cmake -DBUILD_SHARED_LIBS=on ..
+make -j && sudo make install
+```
+
 --------------------------------------------------------------------------------
 --------------------------- 以下属于个人编程环境配置 ---------------------------
 --------------------------------------------------------------------------------
