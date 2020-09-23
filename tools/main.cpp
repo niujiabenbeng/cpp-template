@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
   google::InitGoogleLogging(argv[0]);
   google::LogToStderr();
 
-  //// 这两个函数不适合用gtest, 所以直接输出结果
+  // 这两个函数不适合用gtest, 所以直接输出结果
   LOG(INFO) << "Current Time: " << GetCurrentTimeMs();
   LOG(INFO) << "which gcc: " << ExecShell("which gcc");
   std::vector<float> float_vec{0.01, 0.1, 1.0, 10.0, 100.0};

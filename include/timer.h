@@ -102,7 +102,7 @@ class FrequencyCounter {
   using system_clock = std::chrono::system_clock;
   using second_type = std::chrono::duration<float>;
 
-  //// 这里interval以秒为单位, interval=0.001为毫秒
+  // 这里interval以秒为单位, interval=0.001为毫秒
   explicit FrequencyCounter(float interval = 1.0f) : interval_(interval) {}
   DEFAULT_COPY_ASIGN(FrequencyCounter);
   DEFAULT_MOVE_ASIGN(FrequencyCounter);

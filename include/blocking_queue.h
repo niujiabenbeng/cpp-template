@@ -10,8 +10,8 @@ template <class T> class BlockingQueue {
   DISABLE_MOVE_ASIGN(BlockingQueue);
   ~BlockingQueue() { abort(); }
 
-  //// 下面这些获取队列状态的函数获取的只是当前的队列状态, 在多线程的情况下
-  //// 容易产生race condition, 使用的时候需要特别注意.
+  // 下面这些获取队列状态的函数获取的只是当前的队列状态, 在多线程的情况下
+  // 容易产生race condition, 使用的时候需要特别注意.
   bool full() const {
     std::lock_guard<std::mutex> lock(mutex_);
     return queue_.size() == capacity_;
@@ -38,7 +38,7 @@ template <class T> class BlockingQueue {
           return (queue_.size() < capacity_) || aborted_;
       });
       // clang-format on
-      //// abort状态下直接返回
+      // abort状态下直接返回
       if (aborted_) { return false; }
       queue_.push(std::move(value));
     }
@@ -53,7 +53,7 @@ template <class T> class BlockingQueue {
           return (!queue_.empty()) || aborted_;
       });
       // clang-format on
-      //// 如果queue中有数据则优先取出数据
+      // 如果queue中有数据则优先取出数据
       if (aborted_ && queue_.empty()) { return false; }
       value = std::move(queue_.front());
       queue_.pop();
