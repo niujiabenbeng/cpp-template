@@ -1,9 +1,18 @@
 #include "util.h"
 
+#include <openssl/md5.h>
+
 long GetCurrentTimeMs() {
   using milliseconds = std::chrono::milliseconds;
   auto now = std::chrono::system_clock::now().time_since_epoch();
   return std::chrono::duration_cast<milliseconds>(now).count();
+}
+
+std::string GetDateTimeString(long timestamp_ms, const std::string& format) {
+  char buffer[64] = {0};
+  time_t seconds = timestamp_ms / 1000;
+  strftime(buffer, 64, format.c_str(), localtime(&seconds));
+  return std::string(buffer);
 }
 
 void MakeDirsForFile(const std::string& path) {
@@ -55,6 +64,12 @@ Json::Value ParseJsonString(const std::string& content) {
   return root;
 }
 
+std::string DumpJsonValue(const Json::Value& content) {
+  Json::StreamWriterBuilder builder;
+  builder["indentation"] = "";
+  return Json::writeString(builder, content);
+}
+
 Json::Value ReadJsonFile(const std::string& json_file) {
   std::string content = ReadFile(json_file);
   if (content.empty()) {
@@ -86,5 +101,27 @@ std::string ExecShell(const std::string& cmd) {
     result += buffer.data();
   }
   pclose(pipe);
+  return result;
+}
+
+std::vector<std::string> ListDirectory(const std::string& dirname,
+                                       const std::regex& pattern) {
+  namespace bf = boost::filesystem;
+  std::vector<std::string> names;
+  for (const auto& entry : bf::directory_iterator(dirname)) {
+    auto path = entry.path().filename().string();
+    if (std::regex_match(path, pattern)) { names.push_back(path); }
+  }
+  std::sort(names.begin(), names.end());
+  return names;
+}
+
+std::string CalcMD5(const std::string& content) {
+  unsigned char md5[MD5_DIGEST_LENGTH];
+  MD5((unsigned char*) content.data(), content.size(), md5);
+  std::string result(MD5_DIGEST_LENGTH * 2, 0);
+  for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
+    std::sprintf(&result[2 * i], "%02x", md5[i]);
+  }
   return result;
 }

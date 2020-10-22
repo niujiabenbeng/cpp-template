@@ -15,7 +15,7 @@ PROJECT  := hello
 # 这里添加第三方库
 INCLUDE := ./3rdparty/boost/include
 LIBRARY := ./3rdparty/boost/lib
-LIBS    := dl m z rt glog gtest gflags jsoncpp pthread \
+LIBS    := dl m z rt glog gtest gflags curl crypto jsoncpp pthread \
            boost_system boost_filesystem
 
 # 这里添加不想被编译的文件, 文件路径相对于工程目录.

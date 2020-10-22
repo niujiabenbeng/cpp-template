@@ -9,6 +9,9 @@ static_assert(sizeof(long) == 8, "Type 'long' should have 8 bytes");
 // 获取当前时间，以毫秒计时
 long GetCurrentTimeMs();
 
+// 格式化timestamp, format可为: "%Y-%m-%d %H:%M:%S"
+std::string GetDateTimeString(long timestamp_ms, const std::string& format);
+
 // 如果需要的话, 生成文件所在的目录
 void MakeDirsForFile(const std::string& path);
 
@@ -22,6 +25,9 @@ bool WriteFile(const std::string& file, const std::vector<std::string>& lines);
 
 // 解析json字符串，如失败则返回空的Json::Value
 Json::Value ParseJsonString(const std::string& content);
+
+// 将json数据转化成字符串
+std::string DumpJsonValue(const Json::Value& content);
 
 // 读取json文件并解析，如失败则返回空的Json::Value
 Json::Value ReadJsonFile(const std::string& json_file);
@@ -43,5 +49,12 @@ std::string ToString(const std::vector<Dtype>& values,
   std::string result = boost::algorithm::join(string_values, ", ");
   return std::string("[") + result + std::string("]");
 }
+
+// 返回目录中所有的文件和子目录, 结果做升序排列
+std::vector<std::string> ListDirectory(
+    const std::string& dirname, const std::regex& pattern = std::regex(".*"));
+
+// 计算字符串的md5值
+std::string CalcMD5(const std::string& content);
 
 #endif  // CPP_TEMPLATE_UTIL_H_
