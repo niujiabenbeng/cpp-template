@@ -108,7 +108,7 @@ class FrequencyCounter {
   DEFAULT_MOVE_ASIGN(FrequencyCounter);
   ~FrequencyCounter() {}
 
-  float add(int times = 1) {
+  float accumulate(int times = 1, float default_value = -1.0f) {
     if (!is_started_) {
       stamp_ = system_clock::now();
       is_started_ = true;
@@ -116,7 +116,7 @@ class FrequencyCounter {
     count_ += times;
     auto current = system_clock::now();
     auto interval = std::chrono::duration_cast<second_type>(current - stamp_);
-    float result = -1.0f;
+    float result = default_value;
     if (interval >= interval_) {
       result = float(count_) * interval_.count() / interval.count();
       stamp_ = current;

@@ -35,6 +35,14 @@
   return value
 #endif  // ATOMIC_GET
 
+#ifndef ATOMIC_SET
+#define ATOMIC_SET(mutex_, param, value)        \
+  do {                                          \
+    std::lock_guard<std::mutex> lock(mutex_);   \
+    param = value;                              \
+  } while (0)
+#endif  // ATOMIC_SET
+
 // clang-format off
 #include <map>
 #include <regex>

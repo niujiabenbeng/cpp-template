@@ -3,6 +3,8 @@
 /obj
 /build
 /3rdparty
+/tools
+!tools/main.cpp
 run.sh
 test_only*.cpp
 .clangd/
