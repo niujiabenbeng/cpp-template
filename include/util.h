@@ -3,15 +3,6 @@
 
 #include "common.h"
 
-// 要用long保存time stamp, 需要64位的数据
-static_assert(sizeof(long) == 8, "Type 'long' should have 8 bytes");
-
-// 获取当前时间，以毫秒计时
-long GetCurrentTimeMs();
-
-// 格式化timestamp, format可为: "%Y-%m-%d %H:%M:%S"
-std::string GetDateTimeString(long timestamp_ms, const std::string& format);
-
 // 如果需要的话, 生成文件所在的目录
 void MakeDirsForFile(const std::string& path);
 
@@ -56,5 +47,19 @@ std::vector<std::string> ListDirectory(
 
 // 计算字符串的md5值
 std::string CalcMD5(const std::string& content);
+
+// 返回path所在的磁盘的可用空间的大小, 无效路径返回-1.
+int64_t GetAvailableSpace(const std::string& path);
+
+// 返回path指定的文件或者目录的大小, 无效路径返回-1.
+// 只考虑普通文件和目录, 不包括链接等其他形式的文件
+int64_t GetFileSize(const std::string& path);
+
+// 通过字符串计算字节数, 支持的单位包括: b, k, m, g
+// 不区分大小写, 支持小数, 比如: "1.5k", "0.3G"
+int64_t GetBytesFromString(const std::string& content);
+
+// 将bytes转换成利于人读的字符串
+std::string GetBytesString(int64_t bytes);
 
 #endif  // CPP_TEMPLATE_UTIL_H_

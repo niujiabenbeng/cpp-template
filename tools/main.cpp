@@ -36,12 +36,31 @@ TEST(JsonTest, json) {
   }
 }
 
+TEST(TimeUtilTest, time) {
+  auto timestamp = TimeUtil::now();
+  auto timestamp_str = TimeUtil::ToString(timestamp);
+  EXPECT_EQ(TimeUtil::FromString(timestamp_str), timestamp);
+  int64_t interval = static_cast<int64_t>(1.5 * 3600 * 1000);
+  auto interval_str = TimeUtil::ToHumanReadableString(interval);
+  EXPECT_EQ(TimeUtil::FromHumanReadableString(interval_str), interval);
+  int64_t day_start = TimeUtil::GetStartOfDay();
+  std::string format = "%Y-%m-%d %H:%M:%S";
+  auto day_start_str = TimeUtil::ToDatetimeString(day_start, format);
+  EXPECT_EQ(TimeUtil::FromDateTimeString(day_start_str, format), day_start);
+}
+
 int main(int argc, char* argv[]) {
   google::InitGoogleLogging(argv[0]);
   google::LogToStderr();
 
   // 这两个函数不适合用gtest, 所以直接输出结果
-  LOG(INFO) << "Current Time: " << GetCurrentTimeMs();
+  auto now = TimeUtil::now();
+  auto start = TimeUtil::GetStartOfDay();
+  auto format = std::string("%Y-%m-%d %H:%M:%S");
+  LOG(INFO) << "Current Time: " << TimeUtil::ToDatetimeString(now, format);
+  LOG(INFO) << "today start: " << TimeUtil::ToDatetimeString(start, format);
+  LOG(INFO) << "available space: " << GetBytesString(GetAvailableSpace("./"));
+  LOG(INFO) << "total size: " << GetBytesString(GetFileSize("./"));
   LOG(INFO) << "which gcc: " << ExecShell("which gcc");
   std::vector<float> float_vec{0.01, 0.1, 1.0, 10.0, 100.0};
   LOG(INFO) << "some numbers: " << ToString(float_vec, "%.4f");
@@ -49,7 +68,7 @@ int main(int argc, char* argv[]) {
   Timer timer;
   timer.Start();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  LOG(INFO) << "Sleeping 1s uses: " << timer.Seconds() << "s";
+  LOG(INFO) << "Sleeping 1 sec uses: " << timer.Seconds() << "s";
 
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

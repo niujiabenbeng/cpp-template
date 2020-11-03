@@ -36,10 +36,10 @@
 #endif  // ATOMIC_GET
 
 #ifndef ATOMIC_SET
-#define ATOMIC_SET(mutex_, param, value)        \
-  do {                                          \
-    std::lock_guard<std::mutex> lock(mutex_);   \
-    param = value;                              \
+#define ATOMIC_SET(mutex_, param, value)      \
+  do {                                        \
+    std::lock_guard<std::mutex> lock(mutex_); \
+    param = value;                            \
   } while (0)
 #endif  // ATOMIC_SET
 
@@ -56,6 +56,7 @@
 #include <thread>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 #include <streambuf>
 #include <functional>
 #include <condition_variable>
@@ -67,5 +68,8 @@
 #include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/classification.hpp>
 #include <jsoncpp/json/json.h>
+// clang-format on
+
+namespace bf = boost::filesystem;  // NOLINT
 
 #endif  // CPP_TEMPLATE_COMMON_H_

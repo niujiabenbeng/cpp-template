@@ -49,7 +49,7 @@ class Timer {
   void Accumulate() {
     if (is_running_) { this->Stop(); }
     CHECK(has_run_once_) << "Timer has never been run at all.";
-    CHECK(!has_accumulated_) << "This interval has allready been accumulated.";
+    CHECK(!has_accumulated_) << "This interval has already been accumulated.";
     total_ += stop_ - start_;
     count_ += 1;
     has_accumulated_ = true;
@@ -93,7 +93,6 @@ class Timer {
   bool is_running_ = false;
   bool has_run_once_ = false;
   bool has_accumulated_ = false;
-
   int count_ = 0;
 };
 
@@ -134,6 +133,37 @@ class FrequencyCounter {
   system_clock::time_point stamp_;
   int count_ = 0;
   bool is_started_ = false;
+};
+
+// 本类统一时间点和时间段, 时间点取unix时间. 两者都以毫秒为单位.
+class TimeUtil {
+ public:
+  // 返回当前时间
+  static int64_t now();
+
+  // 返回给定时刻所在天的起始时间, 若输入为负值, 则返回今天的起始时间
+  static int64_t GetStartOfDay(int64_t timestamp = -1);
+
+  // 从字符串中读取时间, 实际上是: std::string -> int64_t
+  static int64_t FromString(const std::string& content);
+
+  // 从human readable字符串中读取时间, 格式为: 数字+单位. 单位支持如下的简写:
+  // s, sec, m, min, h, hour, d, day. 示例: "16s", "5.4 day".
+  static int64_t FromHumanReadableString(const std::string& content);
+
+  // 从日期字符串中读取时间, 字符串格式由format指定.
+  static int64_t FromDateTimeString(const std::string& content,
+                                    const std::string& format);
+
+  // 将timestamp转化为字符串, 实际上是: int64_t -> std::string
+  static std::string ToString(const int64_t timestamp);
+
+  // 将timestamp转化为human readable类型的字符串
+  static std::string ToHumanReadableString(const int64_t timestamp);
+
+  // 将timestamp转化为日期字符串, 格式由format指定
+  static std::string ToDatetimeString(const int64_t timestamp,
+                                      const std::string& format);
 };
 
 #endif  // CPP_TEMPLATE_TIMER_H_

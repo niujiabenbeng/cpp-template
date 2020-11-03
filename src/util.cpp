@@ -2,18 +2,7 @@
 
 #include <openssl/md5.h>
 
-long GetCurrentTimeMs() {
-  using milliseconds = std::chrono::milliseconds;
-  auto now = std::chrono::system_clock::now().time_since_epoch();
-  return std::chrono::duration_cast<milliseconds>(now).count();
-}
-
-std::string GetDateTimeString(long timestamp_ms, const std::string& format) {
-  char buffer[64] = {0};
-  time_t seconds = timestamp_ms / 1000;
-  strftime(buffer, 64, format.c_str(), localtime(&seconds));
-  return std::string(buffer);
-}
+#include "common.h"
 
 void MakeDirsForFile(const std::string& path) {
   auto dirname = boost::filesystem::absolute(path).parent_path();
@@ -124,4 +113,72 @@ std::string CalcMD5(const std::string& content) {
     std::sprintf(&result[2 * i], "%02x", md5[i]);
   }
   return result;
+}
+
+int64_t GetAvailableSpace(const std::string& path) {
+  bf::path check_path(path);
+  // clang-format off
+  if (bf::exists(check_path)) {
+    return bf::space(check_path).available;
+  }
+  if (check_path.has_parent_path()) {
+    return GetAvailableSpace(check_path.parent_path().string());
+  }
+  // clang-format on
+  return -1;
+}
+
+int64_t GetFileSize(const std::string& path) {
+  // linux系统中, 一个文件夹占4096个字节
+  const int64_t empty_dir_size = 4096;
+  if (!bf::exists(path)) { return -1; }
+  if (bf::is_regular_file(path)) { return bf::file_size(path); }
+  if (bf::is_directory(path)) {
+    int64_t total = empty_dir_size;
+    using Iterator = bf::recursive_directory_iterator;
+    for (Iterator iter(path); iter != Iterator{}; ++iter) {
+      if (bf::is_regular_file(iter->path())) {
+        total += bf::file_size(iter->path());
+      } else if (bf::is_directory(iter->path())) {
+        total += empty_dir_size;
+      }
+    }
+    return total;
+  }
+  return -1;
+}
+
+int64_t GetBytesFromString(const std::string& content) {
+  auto lower = boost::algorithm::to_lower_copy(content);
+  // clang-format off
+  std::vector<std::pair<std::string, int>> unit_value_vec = {
+    {"b",    1},
+    {"k",    1024},
+    {"kb",   1024},
+    {"m",    1024 * 1024},
+    {"mb",   1024 * 1024},
+    {"g",    1024 * 1024 * 1024},
+    {"gb",   1024 * 1024 * 1024}
+  };
+  // clang-format on
+  for (const auto& pair : unit_value_vec) {
+    if (boost::algorithm::ends_with(lower, pair.first)) {
+      auto head = lower.substr(0, lower.length() - pair.first.length());
+      return static_cast<int64_t>(std::atof(head.c_str()) * pair.second);
+    }
+  }
+  LOG(ERROR) << "Unknown format: " << content;
+  return -1;
+}
+
+std::string GetBytesString(int64_t bytes) {
+  float amount = std::abs(bytes);
+  std::string unit = "B";
+  // clang-format off
+  if (amount > 1024) { amount /= 1024; unit = "KB"; }
+  if (amount > 1024) { amount /= 1024; unit = "MB"; }
+  if (amount > 1024) { amount /= 1024; unit = "GB"; }
+  if (bytes < 0) { amount *= -1.0; }
+  // clang-format on
+  return (boost::format("%.2f %s") % amount % unit).str();
 }
