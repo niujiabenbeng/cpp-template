@@ -175,9 +175,9 @@ std::string GetBytesString(int64_t bytes) {
   float amount = std::abs(bytes);
   std::string unit = "B";
   // clang-format off
-  if (amount > 1024) { amount /= 1024; unit = "KB"; }
-  if (amount > 1024) { amount /= 1024; unit = "MB"; }
-  if (amount > 1024) { amount /= 1024; unit = "GB"; }
+  if (unit == "B"  && amount > 1024) { amount /= 1024; unit = "KB"; }
+  if (unit == "KB" && amount > 1024) { amount /= 1024; unit = "MB"; }
+  if (unit == "MB" && amount > 1024) { amount /= 1024; unit = "GB"; }
   if (bytes < 0) { amount *= -1.0; }
   // clang-format on
   return (boost::format("%.2f %s") % amount % unit).str();

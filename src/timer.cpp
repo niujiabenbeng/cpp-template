@@ -62,9 +62,9 @@ std::string TimeUtil::ToHumanReadableString(const int64_t timestamp) {
   float amount = std::abs(timestamp / 1000);
   std::string unit = "sec";
   // clang-format off
-  if (amount > 60) { amount /= 60; unit = "min"; }
-  if (amount > 60) { amount /= 60; unit = "hour"; }
-  if (amount > 24) { amount /= 24; unit = "day"; }
+  if (unit == "sec"  && amount > 60) { amount /= 60; unit = "min";  }
+  if (unit == "min"  && amount > 60) { amount /= 60; unit = "hour"; }
+  if (unit == "hour" && amount > 24) { amount /= 24; unit = "day";  }
   if (timestamp < 0) { amount *= -1.0; }
   // clang-format on
   return (boost::format("%.2f %s") % amount % unit).str();
