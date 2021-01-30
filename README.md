@@ -109,11 +109,10 @@ clangd需要compile_commands.json来解析源码.
 ``` shell
 ### make
 sudo apt install bear
-bear make all
+bear make -ik all
 
 ### cmake
-mkdir build && cd build
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
+mkdir build && cd build && cmake ..
 ```
 
 不管是采用bear还是cmake方式, 每添加一个源文件, 都需要重新生成

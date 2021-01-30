@@ -9,6 +9,9 @@ cmake_minimum_required(VERSION 3.0.2)
 # 这里修改project的名字
 project(hello)
 
+# 生成compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # 这里选择用clang还是gcc
 set(CMAKE_CXX_COMPILER clang++)
 set(CMAKE_CXX_FLAGS "-g -Wall -fpic -O3 -std=c++14")
