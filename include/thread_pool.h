@@ -25,7 +25,7 @@ class ThreadPool {
 
 // the constructor just launches some amount of workers
 inline ThreadPool::ThreadPool(const int num_threads) : stop_(false) {
-  for (int i = 0; i < num_threads; ++i)
+  for (int i = 0; i < num_threads; ++i) {
     workers_.emplace_back([this] {
       while (true) {
         std::unique_lock<std::mutex> lock(mutex_);
@@ -38,6 +38,7 @@ inline ThreadPool::ThreadPool(const int num_threads) : stop_(false) {
         task();
       }
     });
+  }
 }
 
 // add new work item to the pool
@@ -50,7 +51,7 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
   auto task = std::make_shared<std::packaged_task<return_type()>>(
       std::bind(std::forward<F>(f), std::forward<Args>(args)...));
   std::future<return_type> res = task->get_future();
-  if (true) {
+  if (true) {  // NOLINT
     std::unique_lock<std::mutex> lock(mutex_);
     tasks_.emplace([task]() { (*task)(); });
   }
@@ -60,12 +61,12 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
 
 // the destructor joins all threads
 inline ThreadPool::~ThreadPool() {
-  if (true) {
+  if (true) {  // NOLINT
     std::unique_lock<std::mutex> lock(mutex_);
     stop_ = true;
   }
   condition_.notify_all();
-  for (std::thread& worker : workers_) worker.join();
+  for (std::thread& worker : workers_) { worker.join(); }
 }
 
 #endif  // CPP_TEMPLATE_THREAD_POOL_H_

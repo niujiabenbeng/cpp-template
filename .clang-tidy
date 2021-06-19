@@ -1,0 +1,25 @@
+---
+Checks: '
+boost-*,
+bugprone-*,
+clang-analyzer-*,
+google-*,
+misc-*,
+modernize-*,
+performance-*,
+portability-*,
+readability-*,
+-bugprone-narrowing-conversions,
+-google-readability-casting,
+-modernize-use-trailing-return-type,
+-modernize-avoid-c-arrays,
+-readability-magic-numbers,
+-readability-avoid-const-params-in-decls,
+'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+InheritParentConfig: true
+FormatStyle: google
+User: chenli
+...

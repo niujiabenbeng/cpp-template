@@ -108,9 +108,9 @@ std::vector<std::string> ListDirectory(const std::string& dirname,
 std::string CalcMD5(const std::string& content) {
   unsigned char md5[MD5_DIGEST_LENGTH];
   MD5((unsigned char*) content.data(), content.size(), md5);
-  std::string result(MD5_DIGEST_LENGTH * 2, 0);
-  for (int i = 0; i < MD5_DIGEST_LENGTH; ++i) {
-    std::sprintf(&result[2 * i], "%02x", md5[i]);
+  std::string result;
+  for (const auto& c : md5) {
+    result += (boost::format("%02x") % int(c)).str();
   }
   return result;
 }

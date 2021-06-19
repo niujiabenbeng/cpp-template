@@ -32,17 +32,17 @@ class Timer {
   }
   float MilliSeconds() {
     if (is_running_) { this->Stop(); }
-    if (!has_run_once_) { return -1.0f; }
+    if (!has_run_once_) { return -1.0F; }
     return std::chrono::duration_cast<millisecond_type>(stop_ - start_).count();
   }
   float MicroSeconds() {
     if (is_running_) { this->Stop(); }
-    if (!has_run_once_) { return -1.0f; }
+    if (!has_run_once_) { return -1.0F; }
     return std::chrono::duration_cast<microsecond_type>(stop_ - start_).count();
   }
   float Seconds() {
     if (is_running_) { this->Stop(); }
-    if (!has_run_once_) { return -1.0f; }
+    if (!has_run_once_) { return -1.0F; }
     return std::chrono::duration_cast<second_type>(stop_ - start_).count();
   }
 
@@ -55,27 +55,27 @@ class Timer {
     has_accumulated_ = true;
   }
   float TotalMilliSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return std::chrono::duration_cast<millisecond_type>(total_).count();
   }
   float TotalMicroSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return std::chrono::duration_cast<microsecond_type>(total_).count();
   }
   float TotalSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return std::chrono::duration_cast<second_type>(total_).count();
   }
   float AverageMilliSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return this->TotalMilliSeconds() / count_;
   }
   float AverageMicroSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return this->TotalMicroSeconds() / count_;
   }
   float AverageSeconds() {
-    if (count_ <= 0) { return -1.0f; }
+    if (count_ <= 0) { return -1.0F; }
     return this->TotalSeconds() / count_;
   }
   void ResetAccumulator() {
@@ -102,12 +102,12 @@ class FrequencyCounter {
   using second_type = std::chrono::duration<float>;
 
   // 这里interval以秒为单位, interval=0.001为毫秒
-  explicit FrequencyCounter(float interval = 1.0f) : interval_(interval) {}
+  explicit FrequencyCounter(float interval = 1.0F) : interval_(interval) {}
   DEFAULT_COPY_ASIGN(FrequencyCounter);
   DEFAULT_MOVE_ASIGN(FrequencyCounter);
   ~FrequencyCounter() {}
 
-  float accumulate(int times = 1, float default_value = -1.0f) {
+  float accumulate(int times = 1, float default_value = -1.0F) {
     if (!is_started_) {
       stamp_ = system_clock::now();
       is_started_ = true;

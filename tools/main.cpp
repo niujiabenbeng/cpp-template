@@ -40,7 +40,7 @@ TEST(TimeUtilTest, time) {
   auto timestamp = TimeUtil::now();
   auto timestamp_str = TimeUtil::ToString(timestamp);
   EXPECT_EQ(TimeUtil::FromString(timestamp_str), timestamp);
-  int64_t interval = static_cast<int64_t>(1.5 * 3600 * 1000);
+  auto interval = static_cast<int64_t>(1.5 * 3600 * 1000);
   auto interval_str = TimeUtil::ToHumanReadableString(interval);
   EXPECT_EQ(TimeUtil::FromHumanReadableString(interval_str), interval);
   int64_t day_start = TimeUtil::GetStartOfDay();

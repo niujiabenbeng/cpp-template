@@ -1,0 +1,8 @@
+-g
+-xc++
+-std=c++14
+-Iinclude
+-I3rdparty/boost/include
+-I3rdparty/opencv/include
+-I/home/chenli/Documents/tools/boost/include
+-I/home/chenli/Documents/tools/opencv/include

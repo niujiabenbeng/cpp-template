@@ -31,7 +31,7 @@ template <class T> class BlockingQueue {
   int capacity() const { return capacity_; }
 
   bool push(T value) {
-    if (true) {
+    if (true) {  // NOLINT
       std::unique_lock<std::mutex> lock(mutex_);
       // clang-format off
       condition_push_.wait(lock, [this] {
@@ -46,7 +46,7 @@ template <class T> class BlockingQueue {
     return true;
   }
   bool pop(T& value) {
-    if (true) {
+    if (true) {  // NOLINT
       std::unique_lock<std::mutex> lock(mutex_);
       // clang-format off
       condition_pop_.wait(lock, [this] {
@@ -62,7 +62,7 @@ template <class T> class BlockingQueue {
     return true;
   }
   void abort() {
-    if (true) {
+    if (true) {  // NOLINT
       std::lock_guard<std::mutex> lock(mutex_);
       aborted_ = true;
     }

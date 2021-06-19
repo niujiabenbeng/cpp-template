@@ -8,7 +8,6 @@
 run.sh
 test_only*.cpp
 .clangd/
+.cache/
 compile_commands.json
-GPATH
-GRTAGS
-GTAGS
+compile_flags.txt

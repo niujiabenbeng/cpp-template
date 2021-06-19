@@ -86,7 +86,7 @@ make -j && sudo make install
 ### clangd (c++ language server)
 
 ``` shell
-## get srouce code: https://github.com/llvm/llvm-project/releases
+# get srouce code: https://github.com/llvm/llvm-project/releases
 mkdir build && cd build
 cmake -G "Unix Makefiles" \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly" \
@@ -95,7 +95,7 @@ cmake -G "Unix Makefiles" \
       ../llvm
 make -j32 && make install
 
-## 配置环境变量
+# 配置环境变量
 export LD_LIBRARY_PATH=${HOME}/Documents/tools/clang/lib:${LD_LIBRARY_PATH}
 export PATH=${HOME}/Documents/tools/clang/bin:${PATH}
 ```
@@ -128,9 +128,9 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 -Iinclude
 -I3rdparty/boost/include
 -I3rdparty/opencv/include
--I~/Documents/tools/boost/include
--I~/Documents/tools/opencv/include
-```
+-I/home/chenli/Documents/tools/boost/include
+-I/home/chenli/Documents/tools/opencv/include
+ ```
 
 其中, `-xc++`选项将所有的`.h`文件按`c++`头文件处理, 若没有这个选项, 则clangd会认
 为`.h`文件为`c`的头文件, 其中使用`c++`的语法会报错.
@@ -141,13 +141,14 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 
 2. 这里为了方便, 包含了多个`opencv`和`boost`的目录, 如果产生冲突, 则需要删掉多余的.
 
-3. helm-lsp中, 默认开启了模糊匹配, 为了避免补全选项过多过杂, 需要关闭模糊匹配:
-   `:fuzzy-match nil`
 
+##### 自动排版
 
-##### clang-format
+自动排版用: clang-format, 配置文件位于.clang-format.
 
-clang-format 配置文件基于 clang-format v10.0.
+##### linter
+
+linter为clang-tidy, 配置文件为: .clang-tidy. clang-tidy也需要compile_commands.json
 
 
 ### .neoignore
