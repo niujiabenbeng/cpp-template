@@ -4,7 +4,7 @@
 ################################################################################
 
 CC := clang++
-CFLAGS := -g -Wall -fpic -O3 -std=c++14
+CFLAGS := -g -Wall -fpic -O3 -std=c++17
 
 INCDIR   := include
 SRCDIR   := src

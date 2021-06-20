@@ -49,7 +49,7 @@ auto ThreadPool::enqueue(F&& f, Args&&... args)
 
   using return_type = typename std::result_of<F(Args...)>::type;
   auto task = std::make_shared<std::packaged_task<return_type()>>(
-      std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+      std::bind(std::forward<F>(f), std::forward<Args>(args)...));  // NOLINT
   std::future<return_type> res = task->get_future();
   if (true) {  // NOLINT
     std::unique_lock<std::mutex> lock(mutex_);

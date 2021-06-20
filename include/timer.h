@@ -16,7 +16,7 @@ class Timer {
   }
   DEFAULT_COPY_ASIGN(Timer);
   DEFAULT_MOVE_ASIGN(Timer);
-  ~Timer() {}
+  ~Timer() = default;
 
   void Start() {
     CHECK(!is_running_) << "Timer is already started.";
@@ -89,7 +89,7 @@ class Timer {
  private:
   system_clock::time_point start_;
   system_clock::time_point stop_;
-  system_clock::duration total_;
+  system_clock::duration total_{};
   bool is_running_ = false;
   bool has_run_once_ = false;
   bool has_accumulated_ = false;
@@ -105,7 +105,7 @@ class FrequencyCounter {
   explicit FrequencyCounter(float interval = 1.0F) : interval_(interval) {}
   DEFAULT_COPY_ASIGN(FrequencyCounter);
   DEFAULT_MOVE_ASIGN(FrequencyCounter);
-  ~FrequencyCounter() {}
+  ~FrequencyCounter() = default;
 
   float accumulate(int times = 1, float default_value = -1.0F) {
     if (!is_started_) {

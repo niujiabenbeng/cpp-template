@@ -6,7 +6,8 @@
 #include "timer.h"
 #include "util.h"
 
-TEST(FileIOTest, fileio) {
+
+TEST(FileIOTest, fileio) {  // NOLINT
   auto tempfile = boost::filesystem::unique_path().string();
   std::vector<std::string> lines = {"hello", "world"};
   EXPECT_TRUE(WriteFile(tempfile, lines));
@@ -16,13 +17,13 @@ TEST(FileIOTest, fileio) {
   }
 }
 
-TEST(ThreadPoolTest, pool) {
+TEST(ThreadPoolTest, pool) {  // NOLINT
   ThreadPool pool(4);
   auto result = pool.enqueue([](int answer) { return answer; }, 42);
   EXPECT_EQ(result.get(), 42);
 }
 
-TEST(JsonTest, json) {
+TEST(JsonTest, json) {  // NOLINT
   Json::Value root;
   root["one"] = 1;
   root["hello"] = "world";
@@ -36,7 +37,7 @@ TEST(JsonTest, json) {
   }
 }
 
-TEST(TimeUtilTest, time) {
+TEST(TimeUtilTest, time) {  // NOLINT
   auto timestamp = TimeUtil::now();
   auto timestamp_str = TimeUtil::ToString(timestamp);
   EXPECT_EQ(TimeUtil::FromString(timestamp_str), timestamp);

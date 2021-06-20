@@ -85,8 +85,11 @@ make -j && sudo make install
 
 ### clangd (c++ language server)
 
+编译好的clang库可以从如下位置找到: https://github.com/llvm/llvm-project/releases
+
+如果没有合适的二进制库, 也可以自己从源码编译:
+
 ``` shell
-# get srouce code: https://github.com/llvm/llvm-project/releases
 mkdir build && cd build
 cmake -G "Unix Makefiles" \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;libcxx;libcxxabi;libunwind;lldb;compiler-rt;lld;polly" \
@@ -144,11 +147,18 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 
 ##### 自动排版
 
-自动排版用: clang-format, 配置文件位于.clang-format.
+自动排版用: clang-format, 配置文件位于.clang-format. 命令:
+
+`clang-format -i include/* src/* tools/*`
+
 
 ##### linter
 
-linter为clang-tidy, 配置文件为: .clang-tidy. clang-tidy也需要compile_commands.json
+linter为clang-tidy, 配置文件为: .clang-tidy.
+
+clang-tidy也需要`compile_commands.json`.
+
+`run_clang_tidy.py`
 
 
 ### .neoignore

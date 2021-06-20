@@ -72,8 +72,8 @@ std::string TimeUtil::ToHumanReadableString(const int64_t timestamp) {
 
 std::string TimeUtil::ToDatetimeString(const int64_t timestamp,
                                        const std::string& format) {
-  char buffer[64] = {0};
+  std::array<char, 64> buffer = {0};
   time_t seconds = timestamp / 1000;
-  strftime(buffer, 64, format.c_str(), localtime(&seconds));
-  return std::string(buffer);
+  strftime(buffer.data(), buffer.size(), format.c_str(), localtime(&seconds));
+  return std::string(buffer.data());
 }
