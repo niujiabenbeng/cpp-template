@@ -50,7 +50,8 @@ int64_t TimeUtil::FromHumanReadableString(const std::string& content) {
 int64_t TimeUtil::FromDateTimeString(const std::string& content,
                                      const std::string& format) {
   struct tm tm;
-  // 这里参考: https://stackoverflow.com/questions/36229908/inconsistent-results-using-strptime-strftime
+  // 这里参考:
+  // https://stackoverflow.com/questions/36229908/inconsistent-results-using-strptime-strftime
   tm.tm_isdst = -1;
   strptime(content.c_str(), format.c_str(), &tm);
   return std::mktime(&tm) * 1000;

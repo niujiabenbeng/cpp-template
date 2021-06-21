@@ -6,7 +6,6 @@
 #include "timer.h"
 #include "util.h"
 
-
 TEST(FileIOTest, fileio) {  // NOLINT
   auto tempfile = boost::filesystem::unique_path().string();
   std::vector<std::string> lines = {"hello", "world"};
