@@ -23,6 +23,7 @@ readability-*,
 -modernize-use-trailing-return-type,
 -readability-avoid-const-params-in-decls,
 -readability-magic-numbers,
+-misc-no-recursion,
 '
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
