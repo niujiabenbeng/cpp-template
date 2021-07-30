@@ -14,16 +14,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 这里选择用clang还是gcc
 set(CMAKE_CXX_COMPILER clang++)
-set(CMAKE_CXX_FLAGS "-g -Wall -fpic -O3 -std=c++14")
+set(CMAKE_CXX_FLAGS "-g -Wall -fpic -O3 -std=c++17")
 
 set(INCDIR   ${PROJECT_SOURCE_DIR}/include)
 set(SRCDIR   ${PROJECT_SOURCE_DIR}/src)
 set(TOOLSDIR ${PROJECT_SOURCE_DIR}/tools)
+set(TESTSDIR ${PROJECT_SOURCE_DIR}/unittest)
 
 # 这里添加第三方库
-set(INCLUDE ./3rdparty/boost/include)
-set(LIBRARY ./3rdparty/boost/lib)
-set(LIBS dl m z rt glog gtest gflags jsoncpp pthread
+set(INCLUDE ./3rdparty/boost/include ./3rdparty/opencv/include)
+set(LIBRARY ./3rdparty/boost/lib ./3rdparty/opencv/lib)
+set(LIBS dl m z rt glog gflags curl crypto jsoncpp pthread
+  opencv_core opencv_highgui opencv_imgcodecs opencv_imgproc
   boost_system boost_filesystem)
 include_directories(SYSTEM ${INCLUDE})
 include_directories(${INCDIR})
@@ -42,8 +44,12 @@ file(GLOB SRC_SRC
 file(GLOB SRC_TOOLS
   ${TOOLSDIR}/*.cpp
   ${TOOLSDIR}/subdir/*.cpp)
+file(GLOB SRC_TESTS
+  ${TESTSDIR}/*.cpp
+  ${TESTSDIR}/subdir/*.cpp)
 list(REMOVE_ITEM SRC_SRC   ${EXCLUDE})
 list(REMOVE_ITEM SRC_TOOLS ${EXCLUDE})
+list(REMOVE_ITEM SRC_TESTS ${EXCLUDE})
 
 # 生成动态库, 位于: lib/lib${PROJECT_NAME}.so
 add_library(${PROJECT_NAME} SHARED ${SRC_SRC})
@@ -60,3 +66,15 @@ foreach(TOOL ${SRC_TOOLS})
   set_target_properties(${BINNAME}
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DIRNAME})
 endforeach(TOOL)
+
+# 生成单元测试可执行文件
+link_libraries(gtest)
+foreach(TEST ${SRC_TESTS})
+  file(RELATIVE_PATH RELPATH ${PROJECT_SOURCE_DIR} ${TEST})
+  get_filename_component(BASENAME ${RELPATH} NAME)
+  get_filename_component(DIRNAME  ${RELPATH} DIRECTORY)
+  string(REGEX REPLACE "cpp$" "bin" BINNAME ${BASENAME})
+  add_executable(${BINNAME} ${SRC_SRC} ${TEST})
+  set_target_properties(${BINNAME}
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${DIRNAME})
+endforeach(TEST)

@@ -5,9 +5,7 @@
 /data
 /3rdparty
 /tools
-!tools/main.cpp
 run.sh
-test_only*.cpp
 .clangd/
 .cache/
 compile_commands.json

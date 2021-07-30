@@ -9,13 +9,17 @@ CFLAGS := -g -Wall -fpic -O3 -std=c++17
 INCDIR   := include
 SRCDIR   := src
 TOOLSDIR := tools
+TESTSDIR := unittest
 BUILDDIR := build
 PROJECT  := hello
 
 # 这里添加第三方库
-INCLUDE := ./3rdparty/boost/include
-LIBRARY := ./3rdparty/boost/lib
-LIBS    := dl m z rt glog gtest gflags curl crypto jsoncpp pthread \
+INCLUDE := ./3rdparty/boost/include \
+           ./3rdparty/opencv/include
+LIBRARY := ./3rdparty/boost/lib \
+           ./3rdparty/opencv/lib
+LIBS    := dl m z rt glog gflags curl crypto jsoncpp pthread \
+           opencv_core opencv_highgui opencv_imgcodecs opencv_imgproc \
            boost_system boost_filesystem
 
 # 这里添加不想被编译的文件, 文件路径相对于工程目录.
@@ -40,13 +44,22 @@ SRC_TOOLS := $(filter-out $(EXCLUDE),$(SRC_TOOLS))
 OBJ_TOOLS := $(addprefix $(BUILDDIR)/,$(SRC_TOOLS:.cpp=.o))
 TGT_TOOLS := $(addprefix $(BUILDDIR)/,$(SRC_TOOLS:.cpp=.bin))
 
+# $(TESTSDIR)包含所有的单元测试的cpp
+# 将unittest和tools分开是因为unittest通常会用到gtest, 而tools并不会
+SRC_TESTS := $(shell find $(TESTSDIR) -type f -name *.cpp)
+SRC_TESTS := $(filter-out $(EXCLUDE),$(SRC_TESTS))
+OBJ_TESTS := $(addprefix $(BUILDDIR)/,$(SRC_TESTS:.cpp=.o))
+TGT_TESTS := $(addprefix $(BUILDDIR)/,$(SRC_TESTS:.cpp=.bin))
+
 # 提前建好所有与build相关的目录
-ALL_BUILD_DIRS := $(sort $(dir $(OBJ_SRC) $(TGT_SRC) $(TGT_TOOLS)))
-ALL_BUILD_DIRS := $(shell mkdir -p $(ALL_BUILD_DIRS))
+BUILD_DIRS := $(sort $(dir $(OBJ_SRC) $(TGT_SRC) $(TGT_TOOLS) $(TGT_TESTS)))
+BUILD_DIRS := $(shell mkdir -p $(BUILD_DIRS))
 
 lib: $(TGT_SRC)
 
 tools: $(TGT_TOOLS)
+
+tests: $(TGT_TESTS)
 
 all: $(TGT_SRC) $(TGT_TOOLS)
 
@@ -56,7 +69,10 @@ $(TGT_SRC): $(OBJ_SRC)
 $(TGT_TOOLS): %.bin : %.o $(OBJ_SRC)
 	$(CC) -o $@ $^ $(LIBRARY) $(LIBS)
 
-$(OBJ_SRC) $(OBJ_TOOLS): $(BUILDDIR)/%.o : %.cpp
+$(TGT_TESTS): %.bin : %.o $(OBJ_SRC)
+	$(CC) -o $@ $^ $(LIBRARY) $(LIBS) -lgtest
+
+$(OBJ_SRC) $(OBJ_TOOLS) $(OBJ_TESTS): $(BUILDDIR)/%.o : %.cpp
 	$(CC) $(CFLAGS) -MP -MMD -c -o $@ $< $(INCLUDE)
 
 ifneq ($(filter clean, $(MAKECMDGOALS)), clean)
@@ -70,4 +86,4 @@ endif
 clean:
 	rm -rf $(BUILDDIR)
 
-.PHONY: clean lib tools all
+.PHONY: clean lib tools tests all
