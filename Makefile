@@ -15,10 +15,12 @@ PROJECT  := hello
 
 # 这里添加第三方库
 INCLUDE := ./3rdparty/boost/include \
-           ./3rdparty/opencv/include
+           ./3rdparty/opencv/include \
+           ./3rdparty/date/include
 LIBRARY := ./3rdparty/boost/lib \
-           ./3rdparty/opencv/lib
-LIBS    := dl m z rt glog gflags curl crypto jsoncpp pthread \
+           ./3rdparty/opencv/lib \
+           ./3rdparty/date/lib
+LIBS    := dl m z rt glog gflags curl crypto jsoncpp pthread date-tz \
            opencv_core opencv_highgui opencv_imgcodecs opencv_imgproc \
            boost_system boost_filesystem
 

@@ -3,17 +3,16 @@
 
 #include "common.h"
 
+#include <date/tz.h>
+#include <date/date.h>
+
 class Timer {
  public:
   using SystemClock = std::chrono::system_clock;
   using SecondType = std::chrono::duration<float>;
   using MilliSecondType = std::chrono::duration<float, std::milli>;
   using MicroSecondType = std::chrono::duration<float, std::micro>;
-
-  Timer() = default;
-  DEFAULT_COPY_ASIGN(Timer);
-  DEFAULT_MOVE_ASIGN(Timer);
-  ~Timer() = default;
+  PLAIN_OLD_DATA_CLASS(Timer);
 
   void Start(bool check_status = true) {
     CHECK(!check_status || !is_running_) << "Timer is already started.";
@@ -108,12 +107,8 @@ class FrequencyCounter {
   using SystemClock = std::chrono::system_clock;
   using Duration = SystemClock::duration;
   using TimePoint = SystemClock::time_point;
-
-  FrequencyCounter() = default;
+  PLAIN_OLD_DATA_CLASS(FrequencyCounter);
   explicit FrequencyCounter(Duration interval) : interval_(interval) {}
-  DEFAULT_COPY_ASIGN(FrequencyCounter);
-  DEFAULT_MOVE_ASIGN(FrequencyCounter);
-  ~FrequencyCounter() = default;
 
   void Reset() {
     count_ = 0;
@@ -123,8 +118,8 @@ class FrequencyCounter {
     count_ += times;
     auto elapsed = SystemClock::now() - stamp_;
     if (elapsed < interval_) { return default_value; }
-    auto result = float(count_) * interval_.count() / elapsed.count();
-    Reset();
+    auto result = (interval_ / elapsed) * count_;
+    this->Reset();
     return result;
   }
 
@@ -132,6 +127,52 @@ class FrequencyCounter {
   Duration interval_{std::chrono::seconds(1)};
   TimePoint stamp_{std::chrono::system_clock::now()};
   int count_{0};
+};
+
+class UnitDuration {
+ public:
+  using Duration = std::chrono::system_clock::duration;
+  using SecondType = std::chrono::duration<float>;
+
+  PLAIN_OLD_DATA_CLASS(UnitDuration);
+  explicit UnitDuration(Duration d) : value(d) {}
+  explicit UnitDuration(const std::string& content);
+  std::string string(bool short_unit = false) const;
+
+  Duration value{Duration::zero()};  // NOLINT
+};
+
+class DateTime {
+ public:
+  using SystemClock = std::chrono::system_clock;
+  using TimePoint = SystemClock::time_point;
+  using Duration = SystemClock::duration;
+
+  PLAIN_OLD_DATA_CLASS(DateTime);
+  explicit DateTime(TimePoint t) : value(t) {}
+  explicit DateTime(const std::string& content) {
+    date::local_time<Duration> local_time;
+    std::stringstream ss(content);
+    date::from_stream(ss, "%Y-%m-%d %H:%M:%S", local_time);
+    // 时区的剥离与添加实际上是time_zone做的
+    value = date::current_zone()->to_sys(local_time);
+  }
+
+  std::string string() const {
+    std::stringstream ss;
+    auto zoned = date::make_zoned(date::current_zone(), value);
+    date::to_stream(ss, "%Y-%m-%d %H:%M:%S", zoned);
+    return ss.str().substr(0, 19);
+  }
+  DateTime seconds() const {
+    using std::chrono::floor;
+    using std::chrono::seconds;
+    auto stamp = value.time_since_epoch();
+    auto sec = floor<seconds>(stamp);
+    return DateTime(TimePoint{sec});
+  }
+
+  TimePoint value{SystemClock::now()};  // NOLINT
 };
 
 #endif  // CPP_TEMPLATE_TIMER_H_

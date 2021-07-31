@@ -36,6 +36,20 @@ TEST(JsonTest, json) {  // NOLINT
   }
 }
 
+TEST(UnitDurationTest, unitduration) {  // NOLINT
+  auto duration = UnitDuration(std::chrono::seconds(16));
+  auto duration2 = UnitDuration(duration.string(false));
+  auto duration3 = UnitDuration(duration.string(true));
+  EXPECT_TRUE(duration.value == duration2.value);
+  EXPECT_TRUE(duration.value == duration3.value);
+}
+
+TEST(DateTimeTest, datetime) {  // NOLINT
+  auto dt = DateTime().seconds();
+  auto dt2 = DateTime(dt.string());
+  EXPECT_TRUE(dt.value == dt2.value);
+}
+
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

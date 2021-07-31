@@ -29,6 +29,14 @@
   classname& operator=(classname&&) = default
 #endif  // DEFAULT_MOVE_ASIGN
 
+#ifndef PLAIN_OLD_DATA_CLASS
+#define PLAIN_OLD_DATA_CLASS(classname) \
+  classname() = default;                \
+  DEFAULT_COPY_ASIGN(classname);        \
+  DEFAULT_MOVE_ASIGN(classname);        \
+  ~classname() = default;
+#endif  // PLAIN_OLD_DATA_CLASS
+
 #ifndef ATOMIC_GET
 #define ATOMIC_GET(mutex_, value)           \
   std::lock_guard<std::mutex> lock(mutex_); \

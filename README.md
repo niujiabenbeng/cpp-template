@@ -70,6 +70,8 @@ sudo apt install -y libgflags-dev
 sudo apt install -y libjsoncpp-dev
 sudo apt install -y libboost-all-dev
 sudo apt install -y libopencv-dev
+sudo apt install -y libcurl4-openssl-dev
+sudo apt install -y libssl-dev
 ```
 
 gtest没有提供`apt install`的选项, 需要从源码安装:
@@ -81,6 +83,12 @@ cd googletest-release-1.8.1
 mkdir build && cd build
 cmake -DBUILD_SHARED_LIBS=on ..
 make -j && sudo make install
+```
+
+date也没有提供`apt install`的选项, 需要从源码安装:
+
+``` shell
+wget https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.0.tar.gz
 ```
 
 ### Good Books
