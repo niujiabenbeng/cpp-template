@@ -1,10 +1,10 @@
 #ifndef CPP_TEMPLATE_TIMER_H_
 #define CPP_TEMPLATE_TIMER_H_
 
-#include "common.h"
-
-#include <date/tz.h>
 #include <date/date.h>
+#include <date/tz.h>
+
+#include "common.h"
 
 class Timer {
  public:

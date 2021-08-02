@@ -74,7 +74,7 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 
 linter为clang-tidy, 配置文件为: .clang-tidy.
 
-clang-tidy也需要`compile_commands.json`. 命令: `run_clang_tidy.py`
+clang-tidy也需要`compile_commands.json`. 命令: `run-clang-tidy.py`
 
 
 ### .neoignore

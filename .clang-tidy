@@ -27,7 +27,7 @@ readability-*,
 -misc-no-recursion,
 '
 WarningsAsErrors: ''
-HeaderFilterRegex: ''
+HeaderFilterRegex: '(!common\.h)'
 AnalyzeTemporaryDtors: false
 InheritParentConfig: true
 FormatStyle: google

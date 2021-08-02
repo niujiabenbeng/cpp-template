@@ -91,6 +91,17 @@ date也没有提供`apt install`的选项, 需要从源码安装:
 wget https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.0.tar.gz
 ```
 
+### Useful tools
+
+1. 生成`compile_commands.json`: `bear make -ir -j4 tools tests`
+
+2. auto-formatting: `clang-format -i include/* src/* tools/* unittest/*`
+
+3. linting: `run-clang-tidy.py`
+
+注意: `run-clang-tidy.py`处理的是从`compile_commands.json`中的文件.
+
+
 ### Good Books
 
 1. google c++ style guide
