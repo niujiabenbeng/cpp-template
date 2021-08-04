@@ -83,6 +83,7 @@ ifneq ($(filter clean, $(MAKECMDGOALS)), clean)
     # 但是由于.d文件只包含依赖, 并没有实际的编译指令, 所以并不耗费时间.
     -include $(OBJ_SRC:.o=.d)
     -include $(OBJ_TOOLS:.o=.d)
+    -include $(OBJ_TESTS:.o=.d)
 endif
 
 clean:
