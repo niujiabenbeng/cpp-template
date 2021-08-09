@@ -95,7 +95,7 @@ wget https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.0.tar.gz
 
 1. 生成`compile_commands.json`: `bear make -ir -j4 tools tests`
 
-2. auto-formatting: `clang-format -i include/* src/* tools/* unittest/*`
+2. auto-formatting: `clang-format -i include/* src/* tools/* unittests/*`
 
 3. linting: `run-clang-tidy.py`
 

@@ -19,6 +19,7 @@ make -j32 && make install
 # 配置环境变量
 export LD_LIBRARY_PATH=${HOME}/Documents/tools/clang/lib:${LD_LIBRARY_PATH}
 export PATH=${HOME}/Documents/tools/clang/bin:${PATH}
+export PATH=${HOME}/Documents/tools/clang/share/clang:${PATH}
 ```
 
 ##### 跳转和补全
@@ -30,7 +31,7 @@ clangd需要compile_commands.json来解析源码.
 ``` shell
 ### make
 sudo apt install bear
-bear make -ik all
+bear make -ik -j4 tools tests
 
 ### cmake
 mkdir build && cd build && cmake ..
@@ -67,7 +68,7 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 
 自动排版用: clang-format, 配置文件位于.clang-format. 命令:
 
-`clang-format -i include/* src/* tools/*`
+`clang-format -i include/* src/* tools/* unittests/*`
 
 
 ##### linter
