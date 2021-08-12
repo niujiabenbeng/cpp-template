@@ -31,14 +31,11 @@ template <class T> class BlockingQueue {
   int capacity() const { return capacity_; }
 
   bool push(T value) {
-    if (true) {  // NOLINT
+    {
       std::unique_lock<std::mutex> lock(mutex_);
-      // clang-format off
       condition_push_.wait(lock, [this] {
-          return (queue_.size() < capacity_) || aborted_;
-      });
-      // clang-format on
-      // abort状态下直接返回
+        return (queue_.size() < capacity_) || aborted_;
+      });  // clang-format off/on
       if (aborted_) { return false; }
       queue_.push(std::move(value));
     }
@@ -46,14 +43,11 @@ template <class T> class BlockingQueue {
     return true;
   }
   bool pop(T& value) {
-    if (true) {  // NOLINT
+    {
       std::unique_lock<std::mutex> lock(mutex_);
-      // clang-format off
       condition_pop_.wait(lock, [this] {
-          return (!queue_.empty()) || aborted_;
-      });
-      // clang-format on
-      // 如果queue中有数据则优先取出数据
+        return (!queue_.empty()) || aborted_;
+      });  // clang-format off/on
       if (aborted_ && queue_.empty()) { return false; }
       value = std::move(queue_.front());
       queue_.pop();
@@ -62,7 +56,7 @@ template <class T> class BlockingQueue {
     return true;
   }
   void abort() {
-    if (true) {  // NOLINT
+    {
       std::lock_guard<std::mutex> lock(mutex_);
       aborted_ = true;
     }

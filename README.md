@@ -45,7 +45,7 @@ make        # 编译lib文件
 make lib    # 编译lib文件
 make tools  # 编译可执行文件
 make tests  # 编译单元测试文件
-make all    # 编译整个工程(包含lib和tools)
+make all    # 编译整个工程(包含lib, tools, tests)
 make clean  # 清空编译的文件
 ```
 
@@ -93,7 +93,7 @@ wget https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.0.tar.gz
 
 ### Useful tools
 
-1. 生成`compile_commands.json`: `bear make -ir -j4 tools tests`
+1. 生成`compile_commands.json`: `bear make -ir -j4 all`
 
 2. auto-formatting: `clang-format -i include/* src/* tools/* unittests/*`
 

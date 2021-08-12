@@ -13,7 +13,7 @@ std::string ReadFile(const std::string& file, bool is_binary = false);
 template <class T> std::vector<T> ReadLines(std::string& file);
 
 // 一次性写入文件的所有内容
-bool WriteFile(const std::string& file, const char* data, const int len);
+bool WriteFile(const std::string& file, const char* data, int length);
 bool WriteFile(const std::string& file, const std::string& content);
 bool WriteFile(const std::string& file, const std::vector<std::string>& lines);
 

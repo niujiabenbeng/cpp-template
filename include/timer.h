@@ -172,7 +172,7 @@ class DateTime {
     return DateTime(TimePoint{sec});
   }
 
-  TimePoint value{SystemClock::now()};  // NOLINT
+  TimePoint value{SystemClock::now()};
 };
 
 #endif  // CPP_TEMPLATE_TIMER_H_

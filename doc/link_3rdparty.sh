@@ -14,6 +14,7 @@ link_3rdparty() {
     ln -s ${TOOLS}/$1 ${LIBRARY}/$1
 }
 
+mkdir -p ${LIBRARY}
 link_3rdparty opencv
 link_3rdparty boost
 link_3rdparty date
