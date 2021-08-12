@@ -19,7 +19,7 @@ set(CMAKE_CXX_FLAGS "-g -Wall -fpic -O3 -std=c++17")
 set(INCDIR   ${PROJECT_SOURCE_DIR}/include)
 set(SRCDIR   ${PROJECT_SOURCE_DIR}/src)
 set(TOOLSDIR ${PROJECT_SOURCE_DIR}/tools)
-set(TESTSDIR ${PROJECT_SOURCE_DIR}/unittest)
+set(TESTSDIR ${PROJECT_SOURCE_DIR}/unittests)
 
 # 这里添加第三方库
 set(INCLUDE
