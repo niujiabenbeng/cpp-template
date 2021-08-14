@@ -131,7 +131,7 @@ def _lint_cpp_file(file_path, file_length, global_fields, nolint_ranges):
     checks = ",".join(f"-{v}" for v in global_fields)
     lines = _flip_ranges(nolint_ranges, file_length)
     line_filter = {"name": os.path.basename(file_path), "lines": lines}
-    line_filter = json.dumps([line_filter])
+    line_filter = json.dumps([line_filter]).replace(" ", "")
 
     command = ["clang-tidy --quiet"]
     command.append(f"--checks='{checks}'")
@@ -152,9 +152,7 @@ def run_clang_tidy(args):
         nolint_fields = _collect_nolint_fields(lines)
         nolint_ranges = _collect_nolint_ranges(lines)
         if "all" in nolint_fields: continue
-        dirname, filename = os.path.split(file)
-        path = os.path.join(dirname, f".{filename}.4ct")
-        _generate_modified_code(lines, nolint_ranges, path)
+        _generate_modified_code(lines, nolint_ranges, f"{file}.4cf")
         _lint_cpp_file(file, len(lines), nolint_fields, nolint_ranges)
 
 
