@@ -110,7 +110,7 @@ void WriteJsonFile(const Json::Value& root, const std::string& json_file) {
 
 std::string ExecShell(const std::string& cmd) {
   std::string result;
-  std::array<char, 128> buffer;
+  std::array<char, 128> buffer = {};
   FILE* pipe = popen(cmd.c_str(), "r");
   if (pipe == nullptr) {
     LOG(ERROR) << "popen() failed! " << strerror(errno);
@@ -136,7 +136,7 @@ std::vector<std::string> ListDirectory(const std::string& dirname,
 }
 
 std::string CalcMD5(const std::string& content) {
-  std::array<unsigned char, MD5_DIGEST_LENGTH> md5;
+  std::array<unsigned char, MD5_DIGEST_LENGTH> md5 = {};
   MD5((unsigned char*) content.data(), content.size(), md5.data());
   std::string result;
   for (const auto& c : md5) {

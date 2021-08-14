@@ -11,4 +11,5 @@ run.sh
 compile_commands.json
 compile_flags.txt
 *.4cf
+*.4ct
 .#*
