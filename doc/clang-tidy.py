@@ -15,16 +15,16 @@ clang-tidy不支持文件范围的设置, 并且只能设置单行和下一行, 
 
 下面是几个使用扩展设置的例子:
 
-NOLINTGLOBAL(misc-no-recursion): 全局忽略检查项: misc-no-recursion
-NOLINTLINE(2): 忽略行号为2的行. 当前行行号为0, 负数往前数, 正数往后数.
-NOLINTLINE(4:6): 忽略行号为4~6的行.
-NOLINTLINE(-2:): 相当于: NOLINTLINE(-2:0).
-NOLINTLINE(:2): 相当于: NOLINTLINE(0:2).
-NOLINTLINE(:2, 4): 相当于: NOLINTLINE(0:2)和NOLINTLINE(4).
+NOLINTGLOBAL(misc-no-recursion): 全局忽略检查项: misc-no-recursion.
+NOLINTLINE(2):    忽略行号为2的行. 当前行行号为0, 负数往前数, 正数往后数.
+NOLINTLINE(4:6):  忽略行号为4~6的行.
+NOLINTLINE(-2:):  相当于: NOLINTLINE(-2:0).
+NOLINTLINE(:2):   相当于: NOLINTLINE(0:2).
+NOLINTLINE(:2,4): 相当于: NOLINTLINE(0:2)和NOLINTLINE(4).
 """
 
-import re
 import os
+import re
 import json
 import argparse
 
@@ -103,6 +103,7 @@ def _collect_nolint_ranges(lines):
         ranges = _parse_range_string(i, content)
         nolint_ranges.extend(ranges)
 
+    # 不允许每一个range之间有overlap
     nolint_ranges.sort(key=lambda x: x[0])
     for prev, curr in zip(nolint_ranges[:-1], nolint_ranges[1:]):
         assert prev[1] + 1 < curr[0], "no overlap ranges allowed."
