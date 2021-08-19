@@ -93,13 +93,13 @@ wget https://github.com/HowardHinnant/date/archive/refs/tags/v3.0.0.tar.gz
 
 ### Useful tools
 
-1. 生成`compile_commands.json`: `bear make -ir -j4 all`
+1. 生成`compile_commands.json`: `bear make -ir all -j4`
 
-2. auto-formatting: `clang-format -i include/* src/* tools/* unittests/*`
+2. auto-formatting: `./doc/clang-tools.sh format`
 
-3. linting: `run-clang-tidy.py`
+3. linting: `./doc/clang-tools.sh lint`
 
-注意: `run-clang-tidy.py`处理的是从`compile_commands.json`中的文件.
+注意: linting需要`compile_commands.json`
 
 
 ### Good Books

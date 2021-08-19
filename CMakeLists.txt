@@ -30,7 +30,7 @@ set(LIBRARY
   ./3rdparty/boost/lib
   ./3rdparty/opencv/lib
   ./3rdparty/date/lib)
-set(LIBS dl m z rt glog gflags curl crypto jsoncpp pthread date-tz
+set(LIBS dl m z rt glog gflags crypto jsoncpp pthread date-tz
   opencv_core opencv_highgui opencv_imgcodecs opencv_imgproc
   boost_system boost_filesystem)
 include_directories(SYSTEM ${INCLUDE})

@@ -1,7 +1,7 @@
 #ifndef CPP_TEMPLATE_COMMON_H_
 #define CPP_TEMPLATE_COMMON_H_
 
-// NOLINTGLOBAL(bugprone-macro-parentheses)
+// NOLINTFIELD(bugprone-macro-parentheses)
 
 // convert macro to string
 #define STRINGIFY(m) #m

@@ -19,21 +19,20 @@ make -j32 && make install
 # 配置环境变量
 export LD_LIBRARY_PATH=${HOME}/Documents/tools/clang/lib:${LD_LIBRARY_PATH}
 export PATH=${HOME}/Documents/tools/clang/bin:${PATH}
-export PATH=${HOME}/Documents/tools/clang/share/clang:${PATH}
 ```
 
-##### 跳转和补全
+### 跳转和补全
 
 clangd需要compile_commands.json来解析源码.
 
 生成compile_commands.json的命令
 
 ``` shell
-### make
+# make
 sudo apt install bear
-bear make -ik -j4 tools tests
+bear make -ik all -j8
 
-### cmake
+# cmake
 mkdir build && cd build && cmake ..
 ```
 
@@ -46,7 +45,7 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 ``` text
 -g
 -xc++
--std=c++14
+-std=c++17
 -Iinclude
 -I3rdparty/boost/include
 -I3rdparty/opencv/include
@@ -64,18 +63,24 @@ compile_commands.json纪录了每一个cpp文件的编译选项. 若所有的cpp
 2. 这里为了方便, 包含了多个`opencv`和`boost`的目录, 如果产生冲突, 则需要删掉多余的.
 
 
-##### 自动排版
+### 自动排版
 
-自动排版用: clang-format, 配置文件位于.clang-format. 命令:
+自动排版用: clang-format, 配置文件位于: `.clang-format`. 原生的clang-format没有
+设定单行的选项, 对此我进行了扩展, 工具位于: `doc/clang-format.py`
 
-`clang-format -i include/* src/* tools/* unittests/*`
+对整个工程进行自动排版可以用如下命令:
+
+`./doc/clang-tools.sh format`
 
 
-##### linter
+### linter
 
-linter为clang-tidy, 配置文件为: .clang-tidy.
+linter为clang-tidy, 配置文件为: `.clang-tidy`. 原生的clang-tidy没有设定文件
+级别的选项, 对此我进行了扩展, 工具位于: `doc/clang-tidy.py`
 
-clang-tidy也需要`compile_commands.json`. 命令: `run-clang-tidy.py`
+clang-tidy也需要`compile_commands.json`. 对整个工程进行检查可以用如下命令:
+
+`./doc/clang-tools.sh lint`
 
 
 ### .neoignore
