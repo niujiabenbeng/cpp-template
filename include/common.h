@@ -1,6 +1,9 @@
 #ifndef CPP_TEMPLATE_COMMON_H_
 #define CPP_TEMPLATE_COMMON_H_
 
+// yet another placeholder
+#define YAPLACEHOLDER
+
 // convert macro to string
 #define STRINGIFY(m) #m
 #define AS_STRING(m) STRINGIFY(m)
@@ -50,6 +53,14 @@
     param = value;                            \
   } while (0)
 #endif  // ATOMIC_SET
+
+#ifndef ATOMIC_RUN
+#define ATOMIC_RUN(mutex_, command)           \
+  do {                                        \
+    std::lock_guard<std::mutex> lock(mutex_); \
+    command;                                  \
+  } while (0)
+#endif  // ATOMIC_RUN
 
 // clang-format off
 #include <map>

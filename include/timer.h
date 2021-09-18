@@ -1,5 +1,5 @@
-#ifndef CPP_TEMPLATE_TIMER_H_
-#define CPP_TEMPLATE_TIMER_H_
+#ifndef IOTVENDAL_TIMER_H_
+#define IOTVENDAL_TIMER_H_
 
 #include <date/date.h>
 #include <date/tz.h>
@@ -27,10 +27,6 @@ class Timer {
     is_running_ = false;
     has_run_once_ = true;
     has_accumulated_ = false;
-  }
-  SystemClock::duration Elapsed() {
-    CHECK(is_running_) << "Timer is not started yet.";
-    return SystemClock::now() - start_;
   }
 
   float Seconds() {
@@ -108,20 +104,14 @@ class Timer {
   int count_ = 0;
 };
 
-//////////////////////////// class FrequencyCounter ////////////////////////////
+/////////////////////////////// class Frequency ////////////////////////////////
 
-class FrequencyCounter {
+class Frequency {
  public:
+  PLAIN_OLD_DATA_CLASS(Frequency);
   using SystemClock = std::chrono::system_clock;
-  using Duration = SystemClock::duration;
-  using TimePoint = SystemClock::time_point;
-  PLAIN_OLD_DATA_CLASS(FrequencyCounter);
-  explicit FrequencyCounter(Duration interval) : interval_(interval) {}
+  explicit Frequency(SystemClock::duration interval) : interval_(interval) {}
 
-  void Reset() {
-    count_ = 0;
-    stamp_ = SystemClock::now();
-  }
   float Accumulate(int times = 1, float default_value = -1.0F) {
     count_ += times;
     auto elapsed = SystemClock::now() - stamp_;
@@ -130,10 +120,21 @@ class FrequencyCounter {
     this->Reset();
     return result;
   }
+  void Reset() {
+    count_ = 0;
+    stamp_ = SystemClock::now();
+  }
+  void WaitAndReset() {
+    auto elapsed = SystemClock::now() - stamp_;
+    if (elapsed < interval_) {
+      std::this_thread::sleep_for(interval_ - elapsed);
+    }
+    this->Reset();
+  }
 
  private:
-  Duration interval_{std::chrono::seconds(1)};
-  TimePoint stamp_{std::chrono::system_clock::now()};
+  SystemClock::duration interval_{std::chrono::seconds(1)};
+  SystemClock::time_point stamp_{SystemClock::now()};
   int count_{0};
 };
 
@@ -169,14 +170,13 @@ class DateTime {
 
   // 这里展示floor的用法
   DateTime seconds() const {
-    using std::chrono::floor;
     using std::chrono::seconds;
     auto stamp = value.time_since_epoch();
-    auto sec = floor<seconds>(stamp);
+    auto sec = date::floor<seconds>(stamp);
     return DateTime(TimePoint{sec});
   }
 
   TimePoint value{SystemClock::now()};
 };
 
-#endif  // CPP_TEMPLATE_TIMER_H_
+#endif  // IOTVENDAL_TIMER_H_
