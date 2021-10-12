@@ -9,7 +9,7 @@
 
 3. 所有的包含main()函数的文件位于tools目录;
 
-4. 所有单元测试文件位于unittest目录;
+4. 所有单元测试文件位于unittests目录;
 
 
 ### 第三方库设置 (修改Makefile文件)
