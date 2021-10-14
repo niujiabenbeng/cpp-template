@@ -1,7 +1,10 @@
 # google编程规范
 
-本人的c++代码基本遵守google编程规范, 这里列出与google编程规范不一致的地方, 并加
-以说明.
+google编程规范着眼于大项目, 团队合作, 这样会导致写代码和读代码不是同一个人, 所以
+google编程规范强调代码的可读性和注释的完整性.
+
+本人所写的代码基本上是自己维护, 代码量也比较小, 所以可以牺牲一些可读性来保持代码
+的整洁. 这里列出自己的代码规范与google编程规范不一致的地方, 并加以说明.
 
 
 ### Header Files
@@ -118,7 +121,8 @@ when explicit type conversion is necessary.
 typically the case when the I/O is ad-hoc, local, human-readable, and targeted
 at other developers rather than end-users.
 
-选择: 基本不用Streams, 觉得太麻烦. 用boost::format替代.
+选择: 基本不用streams, 觉得太麻烦. 用boost::format替代. 一个类要输出信息也不重载
+operator<<, 用成员函数替代, 比如: ToString(), string().
 
 
 ### Preprocessor Macros
@@ -137,3 +141,40 @@ the lambda will escape the current scope.
 
 选择: 所有情况下遵守. 注意这里的要求: 如果lambda函数在当前范围之外使用, 则需要显
 式指定capture列表, 如果lambda函数在当前范围之内使用, 则不用显式指定capture列表.
+
+
+### General Naming Rules
+
+* 作用域越小变量名可以越简略, 作用域越大变量名必须越清楚.
+
+* 可以用缩写, 但缩写必须是自己常用的. (google编程规范禁止缩写)
+
+* 常用的缩略语保持原样, 比如: ForwardGPU (goolge编程规范为: ForwardGpu)
+
+
+### Naming Rules
+
+这里仅列出不遵守规范的命名方式.
+
+* 文件名: my_class.h, my_class.cpp, test_my_class.cpp
+
+* 全局常量名: kGlobalConstant
+
+* 全局变量名: global_variable_, g_global_variable_
+
+* 局部常量名: local_const_variable, local_constexpr_variable
+
+* 局部static变量: local_static_variable
+
+* 枚举量名: ENUM_NAME
+
+
+### Comments
+
+这里只考虑两种注释:
+
+1. 辅助阅读. 其目的是使代码的逻辑结构一目了然, 也有助于快速查找和定位代码. 这种
+   注释通常位于较长的函数实现代码中.
+
+2. 在关键地方纪录实现逻辑和原因. 这样有助于自己以后阅读代码时了解当时写代码时的
+   想法.
