@@ -34,6 +34,14 @@ static std::string DumpUnitString(int64_t value, const UnitValueVec& map) {
 
 //////////////////////////////// implementation ////////////////////////////////
 
+int64_t GetCurrentTimeMs() {
+  using std::chrono::duration_cast;
+  using std::chrono::milliseconds;
+  using std::chrono::system_clock;
+  auto now = system_clock::now().time_since_epoch();
+  return duration_cast<milliseconds>(now).count();
+}
+
 void MakeDirsForFile(const std::string& path) {
   auto dirname = boost::filesystem::absolute(path).parent_path();
   if (!dirname.empty() && !boost::filesystem::exists(dirname)) {
@@ -106,6 +114,19 @@ void WriteJsonFile(const Json::Value& root, const std::string& json_file) {
   Json::StreamWriter* writer = builder.newStreamWriter();
   writer->write(root, &outfile);
   delete writer;
+}
+
+Json::Value& MergeJsonValue(const Json::Value& from, Json::Value& to) {
+  if (!from.isObject() || !to.isObject()) { return to; }
+  for (const auto& key : from.getMemberNames()) {
+    // 如果key不存在, to[key]返回一个空的Json::Value
+    if (to[key].isObject()) {
+      MergeJsonValue(from[key], to[key]);
+    } else {
+      to[key] = from[key];
+    }
+  }
+  return to;
 }
 
 std::string ExecShell(const std::string& cmd) {

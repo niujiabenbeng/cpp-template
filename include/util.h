@@ -3,6 +3,9 @@
 
 #include "common.h"
 
+// 获取当前时间，以毫秒计时
+int64_t GetCurrentTimeMs();
+
 // 如果需要的话, 生成文件所在的目录
 void MakeDirsForFile(const std::string& path);
 
@@ -28,6 +31,9 @@ Json::Value ReadJsonFile(const std::string& json_file);
 
 // 写json结构到文件，必要的时候生成必须的目录
 void WriteJsonFile(const Json::Value& root, const std::string& json_file);
+
+// 合并两个Json结构
+Json::Value& MergeJsonValue(const Json::Value& from, Json::Value& to);
 
 // 运行shell命令, 出错返回空字符串
 std::string ExecShell(const std::string& cmd);
@@ -78,6 +84,11 @@ template <class T> std::vector<T> ReadLines(const std::string& file) {
   return samples;
 }
 
+template <class... Args> std::string F(const std::string& str, Args... args) {
+  // fold expression requires c++17 standard
+  return (boost::format(str) % ... % args).str();
+}
+
 template <class T, class C>
 std::string ToString(const std::vector<T>& values, C converter) {
   std::vector<std::string> string_values;
@@ -88,23 +99,13 @@ std::string ToString(const std::vector<T>& values, C converter) {
   return std::string("[") + result + std::string("]");
 }
 
-inline std::string ToString(char value) {
-  return (boost::format("%d") % int(value)).str();
-}
-
-inline std::string ToString(int value) {
-  return (boost::format("%d") % value).str();
-}
-
-inline std::string ToString(float value) {
-  return (boost::format("%.2f") % value).str();
-}
-
-inline std::string ToString(double value) {
-  return (boost::format("%.2f") % value).str();
-}
-
-inline std::string ToString(const std::string& value) { return value; }
+// clang-format off
+inline std::string ToString(char   value) { return F("%d", int(value)); }
+inline std::string ToString(int    value) { return F("%d",   value);    }
+inline std::string ToString(float  value) { return F("%.2f", value);    }
+inline std::string ToString(double value) { return F("%.2f", value);    }
+inline std::string ToString(const std::string& value) { return value;   }
+// clang-format on
 
 template <class T> std::string ToString(const std::vector<T>& values) {
   auto converter = [](const T& v) { return ToString(v); };

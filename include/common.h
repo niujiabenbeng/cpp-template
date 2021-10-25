@@ -40,6 +40,20 @@
   ~classname() = default;
 #endif  // PLAIN_OLD_DATA_CLASS
 
+// this macro should be used under public:
+// clang-format off
+#ifndef SINGLETON_CLASS
+#define SINGLETON_CLASS(classname) \
+  ~classname() = default;          \
+ private:                          \
+  classname() = default;           \
+  DISABLE_COPY_ASIGN(classname);   \
+  DISABLE_MOVE_ASIGN(classname);   \
+ public:                           \
+  static_assert(true, "")
+#endif  // SINGLETON_CLASS
+// clang-format on
+
 #ifndef ATOMIC_GET
 #define ATOMIC_GET(mutex_, value)           \
   std::lock_guard<std::mutex> lock(mutex_); \
@@ -64,6 +78,7 @@
 
 // clang-format off
 #include <map>
+#include <set>
 #include <regex>
 #include <mutex>
 #include <queue>

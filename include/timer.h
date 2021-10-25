@@ -1,5 +1,5 @@
-#ifndef IOTVENDAL_TIMER_H_
-#define IOTVENDAL_TIMER_H_
+#ifndef CPP_TEMPLATE_TIMER_H_
+#define CPP_TEMPLATE_TIMER_H_
 
 #include <date/date.h>
 #include <date/tz.h>
@@ -152,7 +152,7 @@ class DateTime {
   explicit DateTime(const std::string& content) {
     date::local_time<Duration> local_time;
     std::stringstream ss(content);
-    date::from_stream(ss, "%Y-%m-%d %H:%M:%S", local_time);
+    date::from_stream(ss, format.c_str(), local_time);
     // 时区的剥离与添加实际上是time_zone做的
     value = date::current_zone()->to_sys(local_time);
   }
@@ -164,7 +164,7 @@ class DateTime {
   std::string string() const {
     std::stringstream ss;
     auto zoned = date::make_zoned(date::current_zone(), value);
-    date::to_stream(ss, "%Y-%m-%d %H:%M:%S", zoned);
+    date::to_stream(ss, format.c_str(), zoned);
     return ss.str();
   }
 
@@ -177,6 +177,7 @@ class DateTime {
   }
 
   TimePoint value{SystemClock::now()};
+  static inline std::string format{"%Y-%m-%d %H:%M:%S"};
 };
 
-#endif  // IOTVENDAL_TIMER_H_
+#endif  // CPP_TEMPLATE_TIMER_H_

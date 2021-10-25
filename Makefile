@@ -20,7 +20,7 @@ INCLUDE := ./3rdparty/boost/include \
 LIBRARY := ./3rdparty/boost/lib \
            ./3rdparty/opencv/lib \
            ./3rdparty/date/lib
-LIBS    := dl m z rt glog gflags crypto jsoncpp pthread date-tz \
+LIBS    := dl m z rt glog gflags crypto jsoncpp pthread date-tz curl \
            opencv_core opencv_highgui opencv_imgcodecs opencv_imgproc \
            boost_system boost_filesystem
 
